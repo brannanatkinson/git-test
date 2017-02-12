@@ -7,6 +7,8 @@ var sassdoc = require('sassdoc');
 // ... variables
 var input = './stylesheets/**/*.scss';
 var output = './public/css';
+var foundationInput = './node_modules/foundation-sites/scss/foundation.scss';
+var foundationOutput = '/';
 var sassOptions = {
   errLogToConsole: true,
   outputStyle: 'expanded'
@@ -18,6 +20,20 @@ var sassdocOptions = {
   dest: './public/sassdoc'
 };
 
+
+gulp.task('foundation', function () {
+  return gulp
+    .src(foundationInput)
+    .pipe(sassdoc())
+    .pipe(sourcemaps.init())
+    .pipe(sass(sassOptions).on('error', sass.logError))
+    .pipe(sourcemaps.write())
+    .pipe(autoprefixer(autoprefixerOptions))
+    .pipe(gulp.dest(foundationOutput))
+    // Release the pressure back and trigger flowing mode (drain)
+    // See: http://sassdoc.com/gulp/#drain-event
+    .resume();
+});
 
 gulp.task('sass', function () {
   return gulp
